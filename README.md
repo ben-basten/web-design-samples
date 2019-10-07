@@ -5,5 +5,4 @@ This is a working sample of some of the projects that I have worked on. Most of 
 ---
 
 ** Projects
-1. Rendering Art
-* Drawing shapes on an HTML5 canvas and posting the shape data to the Express js server
+1. Rendering Art - Drawing shapes on an HTML5 canvas and posting the shape data to the Express js server
