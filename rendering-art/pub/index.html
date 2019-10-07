@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/stylesheet.css">
+    <title>Rendering Arts</title>
+</head>
+
+<body>
+    <h2 class="center">Click anywhere in the rectangle to draw!</h2>
+    <canvas width="500" height="500" id="canvas"></canvas> <br>
+    <div class="center">
+        <h3>Choose a shape</h3>
+        <button disabled="disabled" id="circle">Circle</button>
+        <button id="square">Square</button> <br>
+        <h3>Choose a color</h3>
+        <button disabled="disabled" id="red">Red</button>
+        <button id="green">Green</button>
+        <button id="blue">Blue</button> <br>
+        <h3>Settings</h3>
+        <button id="clear">Clear Canvas*</button>
+        <button id="delete">Delete Saved Shapes</button>
+        <button id="restore">Restore Saved Shapes</button>
+        <p>*Note: when you clear the canvas, the shape information is still saved.</p>
+    </div>
+</body>
+<script src="js/jquery-3.4.1.js"></script>
+<script src="js/client.js"></script>
+
+</html>

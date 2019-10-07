@@ -1,0 +1,26 @@
+canvas {
+    border: 1px solid black;
+}
+.center {
+    width: 500px;
+    text-align: center;
+}
+button {
+    padding: 5px;
+    margin: 5px;
+}
+h3 {
+    margin: 0;
+}
+#red:disabled {
+    color: red;
+}
+#green:disabled {
+    color: green;
+}
+#blue:disabled {
+    color: blue;
+}
+p{
+    font-style: italic;
+}
