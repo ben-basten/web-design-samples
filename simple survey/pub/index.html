@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Voting Booth</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
+</head>
+
+<body>
+    <div id="content">
+        <h1>Vote here!</h1>
+        <div id="results" class="alert alert-success alert-dismissible" role="alert">
+            <h4>Vote submitted!</h4>
+            <h6>New totals:</h6>
+            <p id="counts">test</p>
+            <button type="button" class="close" onclick="$('.alert').fadeOut('fast')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form action="/vote" method="post" id="vote">
+            <div class="form-group" v-for="question in survey">
+                <h6>{{question.question}}</h6>
+                <div class="custom-control custom-radio" v-for="answer in question.options">
+                    <input class="custom-control-input" type="radio" v-bind:id="answer.replace(/\s/g, '')" v-bind:name="question.name" v-bind:value="answer" required>
+                    <label class="custom-control-label" v-bind:for="answer.replace(/\s/g, '')">{{answer}}</label>
+                </div>
+            </div>
+            <!-- <div class="form-group">
+                <h6>Which TV show do you prefer?</h6>
+                <div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="office" name="question1" value="The Office" required>
+                    <label class="custom-control-label" for="office">The Office</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="parks" name="question1" value="Parks and Rec">
+                    <label class="custom-control-label" for="parks">Parks and Recreation</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <h6>Do you like pizza with pineapple?</h6>
+                <div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="yesPineapple" name="question2" value="yes" required>
+                    <label class="custom-control-label" for="yesPineapple">Yes</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input class="custom-control-input" type="radio" id="noPineapple" name="question2" value="no">
+                    <label class="custom-control-label" for="noPineapple">No</label>
+                </div>
+            </div> -->
+            <input type="submit" class="btn btn-info" value="Vote">
+            <input type="button" class="btn btn-secondary" value="Reset" id="reset">
+        </form>
+    </div>
+</body>
+<script src="js/vue.js"></script>
+<script src="js/jquery-3.4.1.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/client.js"></script>
+
+</html>

@@ -1,0 +1,36 @@
+h1 {
+    background-image: url('../img/flag.jpg');
+    margin: -15px -15px 0  -15px;
+    padding: 30px 15px 30px 15px;
+    margin-bottom: 15px;
+    text-shadow: 0px 0px 10px black;
+}
+body {
+    margin: 10px;
+    color: white;
+    /* color: #ffcc33; */
+    background-color: #585ebd;
+}
+#content{
+    padding: 15px;
+    width: 60%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #cc5f75;
+}
+.clearFix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+.alert {
+    display: none;
+    margin-top: 15px;
+}
+
+  @media (max-width: 600px){
+      #content, nav{
+          width: 90%;
+      }
+  }
