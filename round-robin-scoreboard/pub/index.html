@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/stylesheet.css">
+    <title>Round Robin</title>
+</head>
+
+<body>
+    <div id="app">
+        <h1>Round-Robin Tournament Viewer</h1>
+        <table>
+            <tr>
+                <th></th>
+                <th v-for="(row, rowIndex) in results">{{names[rowIndex]}}</th>
+            </tr>
+            <tr v-for="(row, rowIndex) in results">
+                <th v-on:click="displayInput(rowIndex)" class="clickable">
+                    <span v-bind:id="'text' + rowIndex">{{names[rowIndex]}}</span>
+                    <input type="text" v-bind:id="'input' + rowIndex" v-on:focusout="hideInput(rowIndex)">
+                </th>
+                <td v-for="(col, colIndex) in row" v-bind:class="resultType(col)"
+                    v-on:click="changeResult(rowIndex, colIndex)">
+                    <span v-if="col==-1">N/A</span>
+                    <span v-if="col==0">-</span>
+                    <span v-if="col==1">Win</span>
+                    <span v-if="col==2">Loss</span>
+                    <span v-if="col==3">Draw</span>
+                </td>
+            </tr>
+        </table>
+        <div id="controls">
+            <p class="note">Note: click names on left side of the bracket to change them.</p> <br>
+            <p>Number of players:</p>
+            <select id="quantity">
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+            </select> 
+            <p class="note warning">Changing the number of players will permanently erase player names and bracket data.</p><br>
+            <button id="resetBracket">Reset Bracket</button>
+            <button id="resetNames">Reset Names</button>
+        </div>
+    </div>
+</body>
+<script src="js/vue.js"></script>
+<script src="js/jquery-3.4.1.js"></script>
+<script src="js/client.js"></script>
+
+</html>

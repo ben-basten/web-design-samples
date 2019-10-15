@@ -1,0 +1,69 @@
+body {
+    font-family: sans-serif;
+}
+td {
+    border: 1px solid black;
+}
+table {
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+}
+h1 {
+    text-align: center;
+}
+p{
+    display: inline-block;
+    margin: 5px;
+}
+p.note {
+    font-style: italic;
+    font-size: 10px;
+}
+p.warning {
+    color: red;
+}
+div#controls {
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+button {
+    width: 110px;
+    padding: 5px;
+}
+th, td {
+    width: 75px;
+    height: 75px;
+    text-align: center;
+    user-select: none;
+}
+td.none { 
+    background-color: rgb(99, 99, 99);
+}
+td.none:hover {
+    cursor: not-allowed;
+}
+td.neutral {
+    background-color: rgb(190, 190, 190);
+    cursor: pointer;
+}
+td.win {
+    background-color: rgb(146, 250, 146);
+    cursor: pointer;
+}
+td.loss {
+    background-color: rgb(255, 107, 107);
+    cursor: pointer;
+}
+td.draw {
+    background-color: rgb(85, 143, 250);
+    cursor: pointer;
+}
+input {
+    display: none;
+}
+.clickable {
+    cursor: pointer;
+}
