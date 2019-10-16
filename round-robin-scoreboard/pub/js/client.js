@@ -42,6 +42,7 @@ var vm = new Vue({
             $(inputElement).val(this.names[index]);
             $(inputElement).show();
             $(inputElement).focus();
+            $(inputElement).select();
             $(inputElement).keypress(function (event) {
                 var keycode = (event.keyCode ? event.keyCode : event.which);
                 if (keycode == '13') {

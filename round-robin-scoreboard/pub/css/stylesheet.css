@@ -63,6 +63,7 @@ td.draw {
 }
 input {
     display: none;
+    width: 70px;
 }
 .clickable {
     cursor: pointer;
