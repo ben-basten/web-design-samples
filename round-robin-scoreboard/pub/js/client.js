@@ -13,7 +13,13 @@ var vm = new Vue({
             0,
             1,
             2
-        ]
+        ],
+        pairs: {
+            0: 0, //opposite of neutral is neutral
+            1: 2, //opposite of win is loss
+            2: 1, //opposite of loss is win
+            3: 3  //opposite of draw is draw
+        }
     },
     methods: {
         changeResult(row, col) {
@@ -24,6 +30,7 @@ var vm = new Vue({
                     data = 0;
                 }
                 this.results[row].splice(col, 1, data);
+                this.results[col].splice(row, 1, this.pairs[data]);
             }
             $.post("/updateResults", { newResults: this.results }, function (response) {
                 console.log('results updated.');
