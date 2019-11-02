@@ -1,0 +1,87 @@
+h1, h2, h3 {
+	text-align: center;
+	color: white;
+	margin: 10px;
+}
+
+h1 {
+	margin-bottom: 30px;
+}
+
+#error {
+	color: rgb(255, 115, 115);
+}
+
+#reset {
+	display: none;
+}
+
+div#lobby {
+	position: relative;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 300px;
+	text-align: center;
+	color: white;
+}
+
+#app {
+	display: none;
+	text-align: center;
+	color: white;
+}
+p {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+img.loading { 
+	width: 100px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.waiting {
+	position: fixed;
+	width: 500px;
+	left: 50%;
+	top: 25%;
+	margin-left: -250px;
+	z-index: 100;
+	text-align: center;
+	display: none;
+}
+
+#countdown h1 {
+	font-size: 200px;
+}
+
+#tugOfWarContainer {
+	position: relative;
+	overflow: hidden;
+	width: 992px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#foreground {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	z-index: 1;
+}
+
+#buttonContainer {
+	text-align: center;
+}
+
+body {
+	background-color: #530;
+	font-family: sans-serif;
+}
+
+button {
+	margin: 5px;
+}

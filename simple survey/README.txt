@@ -1,1 +1,0 @@
-Use command 'node server.js' to run the server and get full functionality of the app.

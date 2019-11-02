@@ -31,8 +31,6 @@ app.post("/recordPoint", function(req, res) {
         color
     }
     arrayOfClicks.push(coord);
-    console.log(arrayOfClicks[arrayOfClicks.length - 1]);
-    // console.log(arrayOfClicks);
     res.end();
 });
 

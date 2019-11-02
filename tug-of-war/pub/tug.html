@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>Tug of War</title>
+	<link href="css/style1.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	<div id="lobby">
+		<h1>Tug of War</h1>
+		<h3>Create New Game</h3>
+		<button id="newGame">Create Game</button>
+		<h3>Join Existing Game</h3>
+		<input type="text" name="gameId" placeholder="Game ID" id="gameId">
+		<button id="joinGame">Join Game</button> <br>
+		<p id="error"></p>
+	</div>
+	<div id="waitingContainer" class="waiting">
+		<img src="img/loading.svg" class="loading" alt="...">
+		<h3 id="roomId"></h3>
+		<h3>Share this room ID with your friends to join the game!</h3>
+		<h2>Waiting for Opponents...</h2>
+		<button id="cancel">Cancel</button>
+	</div>
+	<div id="countdown" class="waiting">
+		<h1 id="count">3</h1>
+	</div>
+	<div id="app">
+		<h1>Tug of War</h1>
+		<p id="greeting">Welcome PLAYER 1!</p>
+		<div id="tugOfWarContainer">
+			<img src="img/tugOfWarBackground.png" id="background">
+			<img src="img/tugOfWarDogs.png" id="foreground" v-bind:style="currentDogOffset()">
+		</div>
+		<div id="buttonContainer">
+			<button type="button" class="gameButton" v-on:click="changeOffset(direction)">{{direction}}</button> <br>
+			<button type="button" id="reset" v-on:click="reset()">Reset</button>
+			<h3>{{checkWin}}</h3> <br>
+			<button type="button" id="leave">Leave Game</button>
+		</div>
+	</div>
+</body>
+<script src="/socket.io/socket.io.js" type="text/javascript"></script>
+<script src="js/jquery-3.4.1.js"></script>
+<script src="js/vue.js"></script>
+<script src="js/client.js" type="text/javascript"></script>
+
+</html>

@@ -1,0 +1,5 @@
+Both tugOfWarBackground.png and tugOfWarDogs.png are licensed under the Creative Commons Attribution-Share Alide 3.0 Unported license:
+	License: https://creativecommons.org/licenses/by-sa/3.0/deed.en
+	Original author: User "Powerdog" on Wikimedia commons
+	Original URL: https://commons.wikimedia.org/wiki/File:Lissumpp.jpg
+	Changes made: dog removed from background and mirror imaged, background filled in.
