@@ -13,10 +13,13 @@ This is a working sample of some of the projects that I have worked on. Most of 
 ---
 
 **How to Run the Projects**
+
 First, make sure that Node.js is installed on your machine.
 
 *In the local directory of each project:*
+
 To install Node dependencies, use the `npm install` command in the Node command prompt
+
 One dependencies are installed, use the `npm start` command to start the server
 
 ---
