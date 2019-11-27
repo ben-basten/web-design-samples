@@ -1,0 +1,392 @@
+@font-face { font-family: noodle; src: url('../fonts/big_noodle_titling.ttf');}
+
+body {
+    background: url('../img/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: noodle, sans-serif;
+    font-size: 110%;
+    background-attachment: fixed;
+}
+p { 
+    padding: 0;
+    margin: 0;
+}
+#app {
+    display: grid;
+    grid-template-columns: auto 750px;
+    grid-template-rows: auto 143px 710px;
+    justify-content: center;
+    padding-bottom: 40px;
+}
+.grid-item-game {
+    grid-column: 2 / 3;
+    grid-row: 2 / 4;
+    text-align: center;
+}
+table.gameBoard, div#letterTray, div#buttons {
+    display: inline-block;
+}
+.previous {
+    color: white;
+    font-size: 120%;
+    text-shadow: 0px 0px 10px black;
+}
+.bold {
+    font-weight: bold;
+    font-size: 110%;
+}
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+.red {
+    color: #f3634b;
+}
+.green {
+    color: #3ea572;
+}
+.blue {
+    color: #58b2d3;
+}
+
+
+
+/* MODAL */
+/* (tutorial from w3schools) */
+div.alert {
+    display: none; 
+    position: fixed;
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+.alert-content {
+    background-color: #ececec;
+    margin: 30vh auto; 
+    padding: 10px 20px 30px 20px;
+    border: 3px solid #ccc;
+    width: 500px; 
+    border-radius: 10px;
+    font-size: 120%;
+    text-align: center;
+}
+/* for name change */
+.alert-content input {
+    padding: 5px;
+    font-family: noodle, sans-serif;
+    font-size: 102%;
+    width: 200px;
+    border-radius: 10px;
+    height: 24px;
+    border: 3px solid #ccc;
+}
+#error {
+    color: red;
+    font-size: 85%;
+    display: none;
+}
+.alert-content input:focus {
+    border: 3px solid #adadad;
+    outline: 0;
+}
+.input {
+    display: none;
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+} 
+.close:hover,.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+/* GAME SELECTION */
+div.grid-item-gameSelect {
+    grid-column: 1 / 2;
+    width: 250px;
+    text-align: center;
+    height: 100%;
+}
+.grid-item-gameSelect h2 {
+    padding: 5px 0px 5px 0px;
+    margin: 0;
+    background-color: #b6d4df;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+div#gameSelect {
+    background-color: #ececec;
+    border-radius: 10px;
+    height: 100%;
+    overflow: hidden;
+}
+.tab {
+    overflow: hidden;
+    background-color: #b6d4df;
+    border-bottom: 2px solid #ccc;
+}
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    width: 90px;
+    font-family: noodle, sans-serif;
+    font-size: 110%;
+}
+.tab button.active {
+    border: opx solid #adadad;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    background-color: #45a1b9;
+}
+div.list {
+    height: 87%;
+    overflow: auto;
+}
+div.game {
+    border-bottom: 2px solid #ccc;
+    padding: 8px;
+    background-color: #ebdec4;
+    cursor: pointer;
+    height: 50px;
+    position: relative;
+}
+div.game:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+}
+div.game .image, div.game .text, div.game p {
+    display: inline-block;
+    vertical-align: middle;
+}
+div.game .image {
+    margin-top: 4px;
+    float: left;
+}
+/* triangle indicating whether player is winning or losing */
+div.game p.status {
+    position: absolute;
+    right: 15px;
+    top: 22px;
+}
+/* indicator for whether it is the player's current move */
+div.game p.myMove {
+    position: absolute;
+    top: 6px;
+    right: 35px;
+    font-size: 250%;
+    font-family: sans-serif;
+}
+div.game p.score {
+    font-size: 160%;
+    font-weight: bold;
+}
+div.game.active {
+    background-color: #e4c996;
+    cursor: default;
+}
+div.game:hover {
+    background-color: #ebbc64;
+}
+div#Friends {
+    display: none;
+}
+
+
+/* TITLE STYLING */
+.grid-item-title {
+    grid-column: 1 / 3;
+    justify-content: center;
+    color: white;
+    text-align: center;
+}
+.grid-item-title h1 {
+    margin: 5px 0px 5px 0px;
+    text-shadow: 0px 0px 10px black;
+    font-size: 300%;
+}
+.grid-item-title p {
+    font-size: 100%;
+    margin-bottom: 5px;
+}
+
+
+/* BUTTONS */
+button.gameOptions {
+    margin: 5px;
+    padding: 5px;
+    width: 80px;
+    border: 3px solid #ececec;
+    font-family: noodle, sans-serif;
+    font-size: 110%;
+    border-radius: 10px;
+}
+button.gameOptions:hover {
+    border: 3px solid #adadad;
+    cursor: pointer;
+}
+div#buttons {
+    margin-left: 5px;
+    margin-right: 5px;
+    display: inline-block;
+}
+
+
+/*  LETTER TRAY  */
+div#letterTray {
+    width: 385px;
+    height: 45px;
+    text-align: center;
+    margin-top: 3px;
+    background-color: #ececec;
+    padding: 10px 5px 10px 5px;
+    border-radius: 10px;
+}
+
+div.letter {
+    width: 45px;
+    height: 45px;
+    margin: 0;
+    display: inline-block;
+    background-color: #e4c996;
+    position: relative;
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+div.letter:hover {
+    cursor: grab;
+}
+
+.letter span {
+    font-size: 70%;
+    position: relative;
+    bottom: -5px;
+    left: 15px;
+}
+
+.letter p {
+    text-align: center;
+    position: relative;
+    top: 12px;
+}
+
+
+/*  GAMEBOARD STYLING   */
+table.gameBoard, .gameBoard td {
+    border-collapse: collapse;
+    border: 3px solid #ececec;
+}
+
+table.gameBoard {
+    border: 7px solid #ececec;
+    border-radius: 10px;
+    background-image: url("../img/vintage-concrete.png");
+}
+
+.gameBoard td {
+    width: 45px;
+    height: 45px;
+    padding: 0;
+}
+
+td p {
+    text-align: center;
+}
+
+/* double word square styling */
+td.DW, td.center, button#reset {
+    background-color: #ecb2a0;
+}
+/* triple word square styling */
+td.TW {
+    background-color: #f3634b;
+}
+/* double letter square styling */
+td.DL, button#pass, button#enter {
+    background-color: #c9d7dc;
+}
+/* triple letter square styling */
+td.TL, button#play, button#rematch {
+    background-color: #45a1b9;
+}
+/* square styling for letters that have already been placed on the board */
+td.existingLetter, button#shuffle {
+    background-color: #e4c996;
+}
+/* square styling for letters that just were placed on the board */
+td.newLetter {
+    background-color: #ebbc64;
+}
+
+.newLetter p, .existingLetter p {
+    position: relative;
+    bottom: -10px;
+}
+
+td span {
+    font-size: 70%;
+    position: relative;
+    bottom: -2px;
+    left: 15px;
+}
+
+td.newLetter:hover {
+    cursor: grab;
+}
+
+
+/* SCOREBOARD */
+div#scoreboard {
+    width: 250px;
+    height: 138px;
+    background-color: #ececec;
+    border-radius: 10px;
+    text-align: center;
+}
+div#scoreboard p {
+    margin-top: -20px;
+}
+.grid-item-scoreboard {
+    height: 100px;
+    width: 250px;
+    grid-column: 1 / 2;
+    margin-bottom: 5px;
+}
+.score {
+    font-size: 350%;
+}
+.player1, .player2 {
+    width: 70px;
+}
+.player1 {
+    color: blue;
+}
+.player2 {
+    color: red;
+}
+div.inline {
+    display: inline-block;
+}
+div.middle {
+    text-align: center;
+    vertical-align: middle;
+    margin: auto 40px 50px 40px;
+    font-size: 120%;
+}
