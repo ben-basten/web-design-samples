@@ -11,7 +11,7 @@ This is a working sample of some of the projects that I have worked on. Most of 
 4. Tug of War - 2 player multiplayer game using Socket.io to create game lobbies with unique lobby codes for friends to join.
 5. BS Scrabble - 2 player multiplayer Scrabble knockoff game using Socket.io to support multiple clients and Vue for a responsive drag-and-drop interface.
 	* This was a partner final project for my "Client-Side Programming" class. I designed the client side of the game (UI, responsive Vue) and the GameBoard structure while my partner primarily worked on the server-side validation and scoring.
-	* Currently, the game only supports the first 2 clients to open the page. Future enhancements could include using MongoDB to create multiple lobbies.
+	* Currently, the game only supports the first 2 clients to open the page. Future enhancements could include using MongoDB to create multiple lobbies. More bug fixes to come!
 
 ---
 
