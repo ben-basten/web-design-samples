@@ -39,6 +39,7 @@ class Error {
 class TileTrays {
 	constructor() {
 		this.bagOfTiles = { "A": 9, "B": 2, "C": 2, "D": 4, "E": 12, "F": 2, "G": 3, "H": 2, "I": 9, "J": 1, "K": 1, "L": 4, "M": 2, "N": 6, "O": 8, "P": 2, "Q": 1, "R": 6, "S": 4, "T": 6, "U": 4, "V": 2, "W": 2, "X": 1, "Y": 2, "Z": 1 };
+		// this.bagOfTiles = { "A": 5, "B": 2, "C": 1, "D": 2, "E": 6, "F": 1, "G": 1, "H": 2, "I": 4, "K": 1, "L": 2, "M": 1, "N": 3, "O": 4, "P": 1, "R": 3, "S": 2, "T": 3, "U": 2};
 
 		this.player1 = [];
 		this.replaceTiles(true);
@@ -123,31 +124,7 @@ class Square {
 		this.special = special;
 		this.isNew = isNew;
 	}
-
-	hasLetter() {
-		return this.letter != null;
-	}
-
-	// checks if square should be styled as a special square
-	isSpecial() {
-		return this.special && !this.letter;
-	}
-
-	// checks if square should be styled as a played letter
-	isExistingLetter() {
-		return this.letter != null && !this.isNew;
-	}
-
-	// checks if square should be styled as a new letter just placed on the board
-	isNewLetter() {
-		return this.letter != null && this.isNew;
-	}
-
-	removeLetter() {
-		this.letter = null;
-		this.isNew = null;
-	}
-};
+}
 
 class GameBoard {
 	constructor(board) {
@@ -213,20 +190,32 @@ class GameBoard {
 		}
 	}
 
-	checkTilePositions() {
+	checkTilePlacement() {
 		var newLetters = 0;
 		var firstRow, firstCol, isVertical, adjacentVertical, adjacentHorizontal;
 		var middle = Math.floor(this.board.length / 2);
 
+		// makes sure that the move is adjacent to an existing word
+		var isAdjacentExisting = false;
+
 		for (var row = 0; row < this.board.length; row++) {
 			for (var col = 0; col < this.board[row].length; col++) {
 				var square = this.board[row][col];
+
+				// check around each new square to make sure that at least one is next to an existing tile
+				if(square.isNew) {
+					var isAdjacent = this.checkAdjacent(row, col);
+					if (isAdjacent) {
+						isAdjacentExisting = true;
+					}
+				}
+
 				// getting position of first letter
 				if (square.isNew && newLetters == 0) {
 					firstRow = row;
 					firstCol = col;
 					newLetters++;
-					// determining direction of word
+				// determining direction of word
 				} else if (square.isNew && newLetters == 1) {
 					newLetters++;
 					if (col == firstCol) {
@@ -267,15 +256,21 @@ class GameBoard {
 				}
 			}
 		}
+		// checks if no new letters have been placed on the board
 		if (newLetters == 0) {
 			return new Error("Please place a tile on the board.");
 		} 
+		// checks if there is a tile in the middle for the first move
 		if(this.board[middle][middle].letter == null && game.numberOfTurns == 0) {
 			return new Error("A tile must be placed in the center of the board for the first move.");
 		}
+		// checks that the new word is placed adjacent to an existing move
+		if(!isAdjacentExisting && game.numberOfTurns != 0) {
+			return new Error("Invalid tile positions.");
+		}
 		return true;
 	}
-
+	// checks that a new letter is in line with all of the other new letters
 	checkBetween(isVertical, row, col, firstIndex) {
 		if (isVertical) {
 			for (var i = row - 1; i > firstIndex; i--) {
@@ -291,6 +286,40 @@ class GameBoard {
 			}
 		}
 		return true;
+	}
+	// checks around given game square for existing letters
+	checkAdjacent(row, col) {
+		var max = this.board.length - 1;
+
+		// check above
+		if (row > 0) {
+			var square = this.board[row - 1][col];
+			if(square.letter != null && !square.isNew) {
+				return true;
+			}
+		}
+		// check right
+		if (col < max) {
+			var square = this.board[row][col + 1];
+			if(square.letter != null && !square.isNew) {
+				return true;
+			}
+		}
+		// check bottom
+		if (row < max) {
+			var square = this.board[row + 1][col]; 
+			if(square.letter != null && !square.isNew){
+				return true;
+			}
+		}
+		// check left
+		if (col > 0) {
+			var square = this.board[row][col - 1];
+			if (square.letter != null && !square.isNew) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	//Change new squares depending on if the move was valid.
@@ -496,10 +525,8 @@ class Game {
 	changeName(playerId, newName) {
 		if(this.player1Id == playerId) {
 			this.player1 = newName;
-			console.log("player one name " + this.player1);
 		} else {
 			this.player2 = newName;
-			console.log("player two name " + this.player1);
 		}
 	}
 }
@@ -548,11 +575,11 @@ function findNewWord(board, boardlength) {
 //Get the points for the letter on the square.
 function getPointsForSquare(square, letterpoints) {
 	var points = 0;
-	if (square.special == "DL") {
+	if (square.special == "DL" && square.isNew) {
 		var p = letterpoints[square.letter] * 2;
 		points = points + p;
 	}
-	else if (square.special == "TL") {
+	else if (square.special == "TL" && square.isNew) {
 		var p = letterpoints[square.letter] * 3;
 		points = points + p;
 	}
@@ -576,8 +603,8 @@ function buildWordAndPoints(board, letterpoints, horizontal, x, y, boardlength) 
 				//Add the points for that letter to word points.
 				wordpoints = wordpoints + getPointsForSquare(board[firstlettery][i], letterpoints);
 				//Check if it's double word or triple word.
-				if (board[firstlettery][i].special == "DW") double = true;
-				else if (board[firstlettery][i].special == "TW") triple = true;
+				if ((board[firstlettery][i].special == "DW" || board[firstlettery][i].special == "center") && board[firstlettery][i].isNew) double = true;
+				else if (board[firstlettery][i].special == "TW" && board[firstlettery][i].isNew) triple = true;
 			}
 			else break;
 		}
@@ -591,8 +618,8 @@ function buildWordAndPoints(board, letterpoints, horizontal, x, y, boardlength) 
 				//Add the points for that letter to word points.
 				wordpoints = wordpoints + getPointsForSquare(board[i][firstletterx], letterpoints);
 				//Check if it's double word or triple word.
-				if (board[i][firstletterx].special == "DW") double = true;
-				else if (board[i][firstletterx].special == "TW") triple = true;
+				if (board[i][firstletterx].special == "DW" && board[i][firstletterx].isNew) double = true;
+				else if (board[i][firstletterx].special == "TW" && board[i][firstletterx].isNew) triple = true;
 			}
 			else break;
 		}
@@ -623,7 +650,7 @@ function checkAdjacent(board, dictionary, letterpoints, horizontal, x, y, boardl
 
 		//It's valid.
 		if (dictionary.indexOf(word) >= 0) return { valid: true, p: wordpoints };
-		else return { valid: false, p: 0 };
+		else return { valid: false, p: 0, word: word };
 	}
 	else {
 		//Find if there is a letter to the left.
@@ -641,7 +668,7 @@ function checkAdjacent(board, dictionary, letterpoints, horizontal, x, y, boardl
 
 		//It's valid.
 		if (dictionary.indexOf(word) >= 0) return { valid: true, p: wordpoints };
-		else return { valid: false, p: 0 };
+		else return { valid: false, p: 0, word: word };
 	}
 }
 
@@ -649,23 +676,23 @@ function checkNeighbors(board, dictionary, letterpoints, horizontal, firstletter
 	var turnpoints = 0;
 	if (horizontal == true){
 		if (firstlettery == 0){
-			if (board[i][firstlettery + 1].letter != null){
+			if (board[firstlettery + 1][i].letter != null){
 				var w = checkAdjacent(board, dictionary, letterpoints, !horizontal, i, firstlettery, boardlength);
 				if (w.valid == true) turnpoints = turnpoints + w.p;
-				else return { valid: false, p: turnpoints };
+				else return { valid: false, p: turnpoints, word: w.word };
 			}
 		}
 		else if (firstlettery == boardlength - 1){
-			if (board[i][firstlettery - 1].letter != null){
+			if (board[firstlettery - 1][i].letter != null){
 				var w = checkAdjacent(board, dictionary, letterpoints, !horizontal, i, firstlettery, boardlength);
 				if (w.valid == true) turnpoints = turnpoints + w.p;
-				else return { valid: false, p: turnpoints };
+				else return { valid: false, p: turnpoints, word: w.word };
 			}
 		}
 		else if (board[firstlettery - 1][i].letter != null || board[firstlettery + 1][i].letter != null){
 			var w = checkAdjacent(board, dictionary, letterpoints, !horizontal, i, firstlettery, boardlength);
 			if (w.valid == true) turnpoints = turnpoints + w.p;
-			else return { valid: false, p: 0 };
+			else return { valid: false, p: 0, word: w.word };
 		}
 	}
 	//It's vertical.
@@ -674,35 +701,42 @@ function checkNeighbors(board, dictionary, letterpoints, horizontal, firstletter
 			if (board[i][firstletterx + 1].letter != null){
 				var w = checkAdjacent(board, dictionary, letterpoints, !horizontal, firstletterx, i, boardlength);
 				if (w.valid == true) turnpoints = turnpoints + w.p;
-				else return { valid: false, p: turnpoints };
+				else return { valid: false, p: turnpoints, word: w.word };
 			}
 		}
 		else if (firstletterx == boardlength - 1){
 			if (board[i][firstletterx - 1].letter != null){
 				var w = checkAdjacent(board, dictionary, letterpoints, !horizontal, firstletterx, i, boardlength);
 				if (w.valid == true) turnpoints = turnpoints + w.p;
-				else return { valid: false, p: turnpoints };
+				else return { valid: false, p: turnpoints, word: w.word };
 			}
 		}
 		else if (board[i][firstletterx - 1].letter != null || board[i][firstletterx + 1].letter != null){
 			var w = checkAdjacent(board, dictionary, letterpoints, !horizontal, firstletterx, i, boardlength);
 			if (w.valid == true) turnpoints = turnpoints + w.p;
-			else return { valid: false, p: 0 };
+			else return { valid: false, p: 0, word: w.word };
 		}
 	}
 	return { valid: true, p: turnpoints };
 }
 
 //Check if the new word is valid along with any other new words created by it and the total points.
-function isValidWord(board, dictionary, letterpoints) {
+function isValidWord(board, dictionary, letterpoints, tileTray) {
 	var boardlength = board.length;
 	var newword = findNewWord(board, boardlength);
 	var firstletterx = newword.col;
 	var firstlettery = newword.row;
 	var horizontal = newword.horizontal;
 	var word = "";
+	// running score for all of the words that were created in the current turn
 	var turnpoints = 0;
+	if(tileTray.length == 0 && game.tileTrays.numberOfRemainingLetters() != 0) {
+		// add 50 points to the turn if all of the letters in the tray are used
+		turnpoints += 50;
+	}
+	// score for the current word that is being checked
 	var wordpoints = 0;
+
 	if (horizontal == true) {
 		if (firstletterx != 0) {
 			//Find the first letter of the word even if it was already there.
@@ -716,7 +750,7 @@ function isValidWord(board, dictionary, letterpoints) {
 		word = w.w;
 		if (w.t == true) wordpoints = wordpoints * 3;
 		else if (w.d == true) wordpoints = wordpoints * 2;
-		turnpoints = wordpoints;
+		turnpoints += wordpoints;
 
 		//It's valid.
 		if (dictionary.indexOf(word) >= 0) {
@@ -727,7 +761,7 @@ function isValidWord(board, dictionary, letterpoints) {
 					//Check vertically since the original word was horizontal.
 					var w = checkNeighbors(board, dictionary, letterpoints, horizontal, firstletterx, firstlettery, boardlength, i);
 					if (w.valid == true) turnpoints = turnpoints + w.p;
-					else return { valid: false, p: 0 };
+					else return { valid: false, p: 0, word: w.word };
 				}
 				else if (board[firstlettery][i].letter != null && board[firstlettery][i].isNew == false) continue;
 				else break;
@@ -735,7 +769,7 @@ function isValidWord(board, dictionary, letterpoints) {
 			return { valid: true, p: turnpoints, w: word };
 		}
 		//It's not valid.
-		else return { valid: false, p: 0 };
+		else return { valid: false, p: 0, word: word };
 	}
 	//It's vertically aligned.
 	else {
@@ -751,7 +785,7 @@ function isValidWord(board, dictionary, letterpoints) {
 		word = w.w;
 		if (w.t == true) wordpoints = wordpoints * 3;
 		else if (w.d == true) wordpoints = wordpoints * 2;
-		turnpoints = wordpoints;
+		turnpoints += wordpoints;
 
 		//It's valid.
 		if (dictionary.indexOf(word) >= 0) {
@@ -762,7 +796,7 @@ function isValidWord(board, dictionary, letterpoints) {
 					//Check horizontally since the original word was horizontal.
 					var w = checkNeighbors(board, dictionary, letterpoints, horizontal, firstletterx, firstlettery, boardlength, i);
 					if (w.valid == true) turnpoints = turnpoints + w.p;
-					else return { valid: false, p: turnpoints };
+					else return { valid: false, p: turnpoints, word: w.word };
 				}
 				else if (board[i][firstletterx].letter != null && board[i][firstletterx].isNew == false) continue;
 				else break;
@@ -770,11 +804,16 @@ function isValidWord(board, dictionary, letterpoints) {
 			return { valid: true, p: turnpoints, w: word };
 		}
 		//It's not valid.
-		else return { valid: false, p: 0 };
+		else return { valid: false, p: 0, word: word };
 	}
 }
 
+var clientCount = 0;
 io.on("connection", function (socket) {
+	// to alert the user how many clients are using the game at a given moment
+	clientCount++;
+	io.emit("newClientCount", clientCount);
+
 	var gameToSend = game.setPlayer(socket.id);
 	if (!gameToSend.isError) gameToSend = game.getGameForPlayer(socket.id);
 	socket.emit("getGame", gameToSend);
@@ -786,9 +825,9 @@ io.on("connection", function (socket) {
 		var newBoard = new GameBoard(gameboard);
 
 		// result will contain the data that gets sent back to the client
-		var result = newBoard.checkTilePositions();
+		var result = newBoard.checkTilePlacement();
 		if (!result.isError) {
-			var isValid = isValidWord(gameboard, dictionary, letterpoints);
+			var isValid = isValidWord(gameboard, dictionary, letterpoints, tiletray);
 			if (isValid.valid) {
 				newBoard.editValidBoard();
 				game.setGameBoard(newBoard);
@@ -804,7 +843,8 @@ io.on("connection", function (socket) {
 				// console.log(result.gameState.player1Tray);
 				io.emit("playMove", result);
 			} else {
-				result = new Error("Invalid word. Please try again.");
+				var invalidworderror = "'" + isValid.word + "' is an invalid word.";
+				result = new Error(invalidworderror);
 				socket.emit("playMove", result);
 			}
 		} else {
@@ -851,6 +891,8 @@ io.on("connection", function (socket) {
 
 	socket.on("disconnect", function () {
 		game.removePlayer(socket.id);
+		clientCount--;
+		io.emit("newClientCount", clientCount);
 	});
 });
 

@@ -74,17 +74,17 @@
                         <p class="red status" v-else-if="playerOneScore > playerTwoScore && userId == playerTwoName">&#9660;</p>
                         <p v-else class="status">&#9654;</p>
                     </div> 
-                    <!-- <p v-for="(n, index) in 1000">test</p> -->
                 </div>
                 <div class="tabContent" id="Friends">
                     <p>TODO: implement friends functionality</p>
+                    <p>Client Count: {{clientCount}}</p>
                 </div>
             </div>
         </div>
         <div class="grid-item-game">
             <table class="gameBoard">
                 <tr v-for="(row, rowIndex) in gameBoard.board">
-                    <td v-for="(col, colIndex) in row" v-bind:class="{[col.special]: isSpecial(col), 'existingLetter':  isExistingLetter(col), 'newLetter': isNewLetter(col)}" v-bind:draggable="col.isNew" v-on:dragstart="dragFromBoard($event, rowIndex, colIndex)" v-on:dragover="allowDrop($event, col)" v-on:drop="dropOnBoard($event, rowIndex, colIndex)">
+                    <td v-for="(col, colIndex) in row" v-bind:class="{[col.special]: isSpecial(col), 'existingLetter':  isExistingLetter(col), 'newLetter': isNewLetter(col)}" v-bind:draggable="col.isNew" v-on:dragstart="dragFromBoard($event, rowIndex, colIndex)" v-on:dragover="allowDrop($event, col)" v-on:drop="dropOnBoard($event, rowIndex, colIndex)" v-on:dblclick="returnLetter(rowIndex, colIndex)">
                         <p v-if="isCenter(col)">&#9733;</p>
                         <p v-else-if="isSpecial(col)">{{col.special}}</p>
                         <p v-else-if="hasLetter(col)">{{col.letter}}</p>
@@ -101,7 +101,7 @@
             </div> <br>
             <div id="buttons">
                 <button id="rematch" class="gameOptions" v-on:click="rematch()" v-if="gameOver">Rematch</button>
-                <button id="reset" class="gameOptions" v-on:click="resetBoard()" v-if="!gameOver">Reset</button>
+                <button id="reset" class="gameOptions" v-on:click="resetBoard()" v-if="!gameOver">Recall</button>
                 <button id="shuffle" class="gameOptions" v-on:click="shuffleTray()" v-if="!gameOver">Shuffle</button>
                 <button id="pass" class="gameOptions" v-on:click="passMove()" v-if="myTurn && !gameOver">Pass</button>
                 <button id="play" class="gameOptions" v-on:click="playMove()" v-if="myTurn && !gameOver">Play</button>

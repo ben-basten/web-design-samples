@@ -27,8 +27,8 @@ socket.on("playMove", function (data) {
         if (vm.userId == data.gameState.player1){
             vm.myTurn = data.gameState.isPlayer1Turn;
             vm.letterTray = data.gameState.player1Tray;
-            if(!vm.myTurn) displayAlert("Move successful! Waiting for other player to make a move.", true);
-            else displayAlert("Other player made a move. Your turn!", true);
+            if(!vm.myTurn) displayAlert("Move successful! Waiting for opponent to make a move.", true);
+            else displayAlert("The opponent made a move. It's your turn!", true);
         }
         else{
             vm.myTurn = !data.gameState.isPlayer1Turn;
@@ -46,6 +46,7 @@ socket.on("getGame", function (data) {
         changeColors('#ececec');
         vm.previousMove = null;
         vm.gameOver = false;
+        vm.result = null;
         vm.gameBoard = data.board;
         vm.playerOneScore = data.player1Score;
         vm.playerTwoScore = data.player2Score;
@@ -81,6 +82,10 @@ socket.on("getGame", function (data) {
 //     vm.tilesRemaining = data.remainingLetters;
 // });
 
+socket.on("newClientCount", function(count) {
+    vm.clientCount = count;
+});
+
 socket.on("updateNames", function(data) {
     if(vm.userId == vm.playerOneName) {
         vm.userId = data.player1;
@@ -108,7 +113,8 @@ var vm = new Vue({
         previousMove: null,
         result: null,
         letterTray: [],
-        letterPoints: { "A": 1, "B": 3, "C": 3, "D": 2, "E": 1, "F": 4, "G": 2, "H": 4, "I": 1, "J": 8, "K": 5, "L": 1, "M": 3, "N": 1, "O": 1, "P": 3, "Q": 10, "R": 1, "S": 1, "T": 1, "U": 1, "V": 4, "W": 4, "X": 8, "Y": 4, "Z": 10 }
+        letterPoints: { "A": 1, "B": 3, "C": 3, "D": 2, "E": 1, "F": 4, "G": 2, "H": 4, "I": 1, "J": 8, "K": 5, "L": 1, "M": 3, "N": 1, "O": 1, "P": 3, "Q": 10, "R": 1, "S": 1, "T": 1, "U": 1, "V": 4, "W": 4, "X": 8, "Y": 4, "Z": 10 },
+        clientCount: 0
     },
     methods: {
         // on letter drop, places letter on the board and removes the letter from its previous location
@@ -170,6 +176,19 @@ var vm = new Vue({
         allowDrop(event, square) {
             if (square.letter == null) {
                 event.preventDefault();
+            }
+        },
+        // brings a letter back to the tray if it is double clicked
+        returnLetter(row, col) {
+            if(this.gameBoard.board[row][col].isNew) {
+                var letter = this.gameBoard.board[row][col].letter;
+                
+                // remove letter from the gameBoard
+                this.gameBoard.board[row][col].letter = null;
+                this.gameBoard.board[row][col].isNew = false;
+
+                // add letter back to the tray
+                this.letterTray.push(letter);
             }
         },
         // adds all letters on the board back to the letter tray
@@ -318,12 +337,15 @@ function displayInput(message) {
 
 function validateInput() {
     var text = $('#inputField').val();
-    if (text != "") {
+    if (text == "") {
+        $('#error').html("Please enter a name.");
+        $('#error').fadeIn('fast');
+    } else if(text.includes(' ')) {
+        $('#error').html("Name cannot contain spaces.");
+        $('#error').fadeIn('fast');
+    } else {
         vm.changeName(text);
         $('#alertModal').fadeOut('fast');
-    } else {
-        $('#error').html("Invalid name.");
-        $('#error').fadeIn('fast');
     }
 }
 
