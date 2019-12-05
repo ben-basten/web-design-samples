@@ -42,7 +42,7 @@ function resetNames(size){
     names = new Array(parseInt(size));
     
     for(var i = 0; i < names.length; i++){
-        names[i] = i;
+        names[i] = i + 1;
     }
 }
 
