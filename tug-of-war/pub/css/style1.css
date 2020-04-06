@@ -78,10 +78,11 @@ img.loading {
 }
 
 body {
-	background-color: #530;
+	background-color: #9e8763;
 	font-family: sans-serif;
 }
 
 button {
 	margin: 5px;
+	padding: 7px;
 }
